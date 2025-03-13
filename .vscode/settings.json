@@ -1,0 +1,8 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    "editor.formatOnSave": true,
+    "prettier.configPath": ".prettierrc.json",
+    "prettier.requireConfig": true,
+}

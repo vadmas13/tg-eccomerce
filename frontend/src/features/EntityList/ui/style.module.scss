@@ -1,0 +1,24 @@
+.entityList{
+    :global{
+        .adm-swipe-action-action-button{
+            font-size: 12px;
+            padding: 15px !important;
+            border-radius: 4px;
+        }
+        .adm-list-item-content-main {
+            padding: 10px 0;
+        }
+        .adm-swipe-action-actions-right{
+            gap: 5px;
+        }
+        .adm-swipe-action{
+            margin-top: 2px;
+        }
+        .entityListItem{
+            .adm-list-item-content-main, .adm-list-item-content{
+                padding: 0 !important;
+            }
+        }
+       
+    }
+}

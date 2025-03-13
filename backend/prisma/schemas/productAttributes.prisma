@@ -1,0 +1,7 @@
+view ProductAttributes {
+  product_id              String   @id @default(uuid()) @map("product_id")
+  minPrice Int @map("min_price")
+  maxPrice Int @map("max_price")
+
+  @@map("product_attributes") 
+}

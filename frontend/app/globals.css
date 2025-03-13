@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.adm-popup-body-position-top{
+  .adm-popup-close-icon{
+    top: 8px;
+    right: 1.5rem !important;
+  }
+}
+
+.adm-error-block-image{
+  display: flex;
+  justify-content: center;
+}
+
+
+.root-layout{
+  margin: 70px 15px 0px;
+}
+
+.adm-list-body{
+  border: 0 !important;
+}
+
+.card-page{
+  .adm-form-item-label{
+    font-size: 12px !important;
+  }
+}
+
+.adm-floating-bubble-button{
+  overflow: visible !important;
+}

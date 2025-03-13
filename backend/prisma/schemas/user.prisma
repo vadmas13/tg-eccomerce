@@ -1,0 +1,26 @@
+import {Token} from "./token"
+import {Order} from "./order"
+
+model User {
+    id                String    @id @default(uuid())
+    tgUserId          String    @unique @map("tg_user_id")
+    username          String    @map("username")
+    firstName         String?   @map("first_name") 
+    lastName          String?   @map("last_name") 
+    secondName        String?   @map("second_name") 
+    photoUrl          String?   @map("photo_url")
+    roles             Role[]
+    isBlocked         Boolean   @default(false) @map("is_blocked")
+    blockedReason     String?   @map("blocked_reason") 
+    createdAt         DateTime  @default(now()) @map("created_at")
+    updatedAt         DateTime  @updatedAt @map("updated_at")
+    Token             Token[]
+    orders            Order[]   @relation("UserOrders") 
+
+    @@map("user")
+}
+
+enum Role {
+    ADMIN
+    USER
+}

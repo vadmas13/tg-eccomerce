@@ -1,0 +1,12 @@
+export { default as CategoriesListPage } from "./CategoryListPage";
+export { default as CategoriesCreatePage } from "./CategoriesCreate/ui";
+export { default as CategoryPage } from "./CategoryPage/ui";
+export { default as ProductListPage } from "./ProductListPage/ui";
+export { default as ProductPage } from "./ProductPage";
+export { default as ProductCreatePage } from "./ProductCreatePage/ui";
+export { default as CatalogProductsPage } from "./CatalogProductsPage";
+export { default as CatalogProductPage } from "./CatalogProductPage";
+export { default as CartPage } from "./CartPage";
+export { default as OrderListPage } from "./OrdersListPage";
+export { default as OrderPage } from "./OrderPage";
+export { default as CreateOrderPage } from "./CreateOrderPage";

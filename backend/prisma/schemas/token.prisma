@@ -1,0 +1,10 @@
+import {User} from "./user"
+
+model Token {
+    token     String   @unique
+    exp       DateTime
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String   @map("user_id")
+
+    @@map("token")
+}

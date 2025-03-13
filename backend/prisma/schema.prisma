@@ -1,0 +1,178 @@
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "debian-openssl-3.0.x", "rhel-openssl-1.1.x"]
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Cart {
+  id        String     @id @default(uuid())
+  userId    String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  items     CartItem[]
+  order     Order?     @relation("CartOrder")
+  state     CartState  @default(CURRENT)
+
+  @@index([userId])
+  @@map("cart")
+}
+
+enum CartState {
+  CURRENT
+  ORDERED
+}
+
+model CartItem {
+  id        String   @id @default(uuid())
+  cartId    String
+  productId String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  order   Order?  @relation("OrderItems", fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String?
+
+  @@map("cart_item")
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  products  Product[] @relation("ProductCategories")
+
+  @@map("category")
+}
+
+model Document {
+  id           String       @id @default(uuid())
+  customId     String?      @unique @map("custom_id")
+  name         String?
+  documentType DocumentType
+  value        Bytes
+  productId    String
+  product      Product?     @relation("ProductDocuments", fields: [productId], references: [id])
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  createdAt    DateTime     @default(now()) @map("created_at")
+
+  @@map("document")
+}
+
+enum DocumentType {
+  PRODUCT_IMG
+  PRODUCT_AVATAR
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+  SHIPPED
+  DELIVERED
+  RETURNED
+}
+
+enum OrderAddressType {
+  SDEK
+  RU_POST
+}
+
+enum OrderPaymentState {
+  PAID
+  NOT_PAID
+}
+
+model Order {
+  id             String            @id @default(uuid())
+  userId         String
+  firstName      String            @map("first_name")
+  lastName       String            @map("last_name")
+  secondName     String?           @map("second_name")
+  cartId         String            @unique
+  status         OrderStatus       @default(PENDING)
+  payementStatus OrderPaymentState @default(NOT_PAID)
+  totalAmount    Float
+  totalPrice     Float
+  address        String
+  comment        String?
+  addressType    OrderAddressType
+  orderTrackId   Int?              @default(autoincrement())
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  user  User       @relation("UserOrders", fields: [userId], references: [id])
+  cart  Cart       @relation("CartOrder", fields: [cartId], references: [id])
+  items CartItem[] @relation("OrderItems")
+
+  @@index([userId])
+  @@index([cartId])
+  @@map("orders")
+}
+
+model Product {
+  id              String   @id @default(uuid())
+  name            String
+  description     String?
+  price           Int
+  discountedPrice Int?     @map("discounted_price")
+  minPrice        Int      @map("min_price")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  createdAt       DateTime @default(now()) @map("created_at")
+  avatarCustomId  String?  @map("avatar_custom_id")
+  attributes      String?
+
+  categories Category[] @relation("ProductCategories")
+  documents  Document[] @relation("ProductDocuments")
+  cartItems  CartItem[]
+
+  @@map("product")
+}
+
+view ProductAttributes {
+  product_id String @id @default(uuid()) @map("product_id")
+  minPrice   Int    @map("min_price")
+  maxPrice   Int    @map("max_price")
+
+  @@map("product_attributes")
+}
+
+model Token {
+  token  String   @unique
+  exp    DateTime
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String   @map("user_id")
+
+  @@map("token")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  tgUserId      String   @unique @map("tg_user_id")
+  username      String   @map("username")
+  firstName     String?  @map("first_name")
+  lastName      String?  @map("last_name")
+  secondName    String?  @map("second_name")
+  photoUrl      String?  @map("photo_url")
+  roles         Role[]
+  isBlocked     Boolean  @default(false) @map("is_blocked")
+  blockedReason String?  @map("blocked_reason")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  Token         Token[]
+  orders        Order[]  @relation("UserOrders")
+
+  @@map("user")
+}
+
+enum Role {
+  ADMIN
+  USER
+}

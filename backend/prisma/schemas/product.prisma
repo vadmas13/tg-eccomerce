@@ -1,0 +1,22 @@
+import {Category} from "./category"
+import {Document} from "./document"
+import {CartItem} from "./cartItem"
+
+model Product {
+    id            String       @id @default(uuid())
+    name          String   
+    description   String?       
+    price         Int     
+    discountedPrice Int?     @map("discounted_price")
+    minPrice      Int         @map("min_price")
+    updatedAt     DateTime     @updatedAt @map("updated_at")
+    createdAt     DateTime     @default(now()) @map("created_at")
+    avatarCustomId String?     @map("avatar_custom_id")
+    attributes    String?
+    
+    categories    Category[]   @relation("ProductCategories") 
+    documents     Document[]   @relation("ProductDocuments")
+    cartItems     CartItem[]  
+
+    @@map("product") 
+}

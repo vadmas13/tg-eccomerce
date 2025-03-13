@@ -1,0 +1,22 @@
+import {CartItem} from "./cartItem"
+import {Order} from "./order"
+
+model Cart {
+  id        String     @id @default(uuid()) 
+  userId    String        
+  createdAt DateTime   @default(now()) 
+  updatedAt DateTime   @updatedAt
+  items     CartItem[] 
+  order     Order?     @relation("CartOrder")
+  state     CartState  @default(CURRENT)
+
+  @@index([userId]) 
+
+  @@map("cart")
+} 
+
+
+enum CartState {
+    CURRENT
+    ORDERED
+}

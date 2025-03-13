@@ -1,0 +1,20 @@
+import {Product} from "./product"
+
+model Document {
+    id            String   @id @default(uuid())
+    customId      String?  @map("custom_id") @unique
+    name          String?   
+    documentType  DocumentType   
+    value         Bytes    
+    productId     String   
+    product       Product? @relation("ProductDocuments", fields: [productId], references: [id])
+    updatedAt     DateTime @updatedAt @map("updated_at")
+    createdAt     DateTime @default(now()) @map("created_at")
+
+    @@map("document")
+}
+
+enum DocumentType {
+    PRODUCT_IMG
+    PRODUCT_AVATAR
+}
