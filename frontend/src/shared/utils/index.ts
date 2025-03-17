@@ -9,3 +9,6 @@ export * from "./document-utils";
 export * from "./attributes-utils";
 export * from "./pagination.utils";
 export * from "./date.utils";
+export * from "./object.utils";
+export * from "./entity-filter.utils";
+export * from "./data-option.utils";

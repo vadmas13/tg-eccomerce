@@ -1,6 +1,11 @@
 "use client";
 
-import { deleteOrder, getAllOrders, OrderListCard } from "@entities";
+import {
+  deleteOrder,
+  getAllOrders,
+  OrderListCard,
+  OrderListFilterForm,
+} from "@entities";
 import { QueryKey, routes } from "@shared/consts";
 import { QueryEntityList } from "@widgets";
 
@@ -30,6 +35,9 @@ const OrdersListPage = () => {
         actions={{
           editBaseUrl: routes.orders.edit.url,
         }}
+        getFiltersNode={(filters, setFilters) => (
+          <OrderListFilterForm setFilters={setFilters} initialData={filters} />
+        )}
       />
     </>
   );

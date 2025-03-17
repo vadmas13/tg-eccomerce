@@ -6,8 +6,12 @@ export interface PaginationDto<TData = unknown> {
   lastPage: number;
 }
 
-export interface PaginationModel {
+export interface PaginationModel extends Record<string, unknown> {
   name?: string;
   page?: number;
   pageSize?: number;
+  createdAtStart?: string;
+  createdAtEnd?: string;
+  updatedAtStart?: string;
+  updatedAtEnd?: string;
 }

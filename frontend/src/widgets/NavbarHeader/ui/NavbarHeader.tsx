@@ -1,16 +1,15 @@
 "use client";
 
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { Form, Space } from "antd-mobile";
-import { FilterOutline } from "antd-mobile-icons";
-import { DebounceSearchBar, PopupComponent } from "@shared/ui";
-import { SearchBarHeader } from "@features";
+import { DebounceSearchBar } from "@shared/ui";
+import { EntityListFilter, SearchBarHeader } from "@features";
 import {
   ProductsQueryParamsFormModel,
   setSearhListFilters,
   setSearhListName,
 } from "@entities";
-import { useAppDispatch } from "@shared/hooks";
+import { useAppDispatch, useAppSelector } from "@shared/hooks";
 
 type NavbarHeaderProps = {
   title?: string;
@@ -19,7 +18,9 @@ type NavbarHeaderProps = {
 const NavbarHeader: FC<NavbarHeaderProps> = ({ title }) => {
   const dispatch = useAppDispatch();
   const [form] = Form.useForm<ProductsQueryParamsFormModel>();
-  const [visibleSearchBar, setVisibleSearchBar] = useState(false);
+  const searchListParamsCount = useAppSelector(
+    (x) => x.product.searchListParamsCount,
+  );
 
   const onSubmitFilters = (data: ProductsQueryParamsFormModel) => {
     dispatch(setSearhListFilters(data));
@@ -29,28 +30,18 @@ const NavbarHeader: FC<NavbarHeaderProps> = ({ title }) => {
     <>
       <div className="fixed top-0 bg-white shadow-md p-2 w-full flex justify-between z-10">
         <div></div>
-        <div className="text-lg">
+        <div className="text-lg flex items-center">
           <Space className="gap-4 mr-5">
             <DebounceSearchBar
               placeholder="Поиск товара"
               onChange={(v) => dispatch(setSearhListName(v))}
             />
           </Space>
-          <Space className="gap-4 mr-3">
-            <FilterOutline
-              className="cursor-pointer"
-              onClick={() => setVisibleSearchBar(true)}
-            />
-          </Space>
+          <EntityListFilter count={searchListParamsCount}>
+            <SearchBarHeader form={form} onFinish={onSubmitFilters} />
+          </EntityListFilter>
         </div>
       </div>
-      <PopupComponent
-        visible={visibleSearchBar}
-        setVisible={setVisibleSearchBar}
-        height="100vh"
-      >
-        <SearchBarHeader form={form} onFinish={onSubmitFilters} />
-      </PopupComponent>
     </>
   );
 };

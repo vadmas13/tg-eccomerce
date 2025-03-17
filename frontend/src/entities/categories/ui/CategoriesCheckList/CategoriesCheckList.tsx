@@ -3,7 +3,7 @@
 import { getCategoriesClient } from "@entities/categories/api";
 import { QueryKey } from "@shared/consts";
 import { query } from "@shared/hoc";
-import { FilterCheckList } from "@shared/ui";
+import { FilterCheckListQuery } from "@shared/ui";
 import { NamePath } from "antd-mobile/es/components/form";
 import { FC, useMemo } from "react";
 
@@ -20,7 +20,7 @@ const CategoriesCheckList: FC<CategoriesCheckListProps> = ({
 }) => {
   const CategoriesList = useMemo(
     () =>
-      query(FilterCheckList, {
+      query(FilterCheckListQuery, {
         queryKey: [QueryKey.CategoriesList],
         queryFn: () => getCategoriesClient(),
         mapper: (data) =>

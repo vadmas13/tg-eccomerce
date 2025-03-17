@@ -5,6 +5,7 @@ import { OrderModel } from "../../models";
 import { FC } from "react";
 import { formatDate } from "@shared/utils";
 import OrderStateTag from "../OrderStateTag";
+import OrderPaymentStateTag from "../OrderPaymentStateTag";
 
 type OrderListCardProps = {
   order: OrderModel;
@@ -18,7 +19,13 @@ const OrderListCard: FC<OrderListCardProps> = ({ order }) => {
           <span className="font-bold">Заказ №:</span>
           <div>{order.orderTrackId},</div>
           <div>от {formatDate(order.createdAt)}</div>
+        </div>
+        <div>
+          {order.lastName} {order.firstName} {order.secondName}
+        </div>
+        <div className="flex gap-1">
           <OrderStateTag state={order.status} />
+          <OrderPaymentStateTag state={order.payementStatus} />
         </div>
         <div className="flex gap-4 items-center">
           <ProductPrice price={order.totalPrice} size="middle" />

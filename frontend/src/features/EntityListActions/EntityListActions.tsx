@@ -1,23 +1,32 @@
 "use client";
 
+import { getEntityFilterCount } from "@shared/utils";
+import EntityListFilter from "../EntityListFilter";
 import { Button } from "antd-mobile";
 import { AddSquareOutline } from "antd-mobile-icons";
 import Link from "next/link";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 
 type EntityListActionsProps = {
   createEntityUrl?: string;
   toggleIsCheckable: () => void;
   isCheckable: boolean;
+  filters: Record<string, unknown>;
+  filtersNode?: ReactNode;
 };
 
 const EntityListActions: FC<EntityListActionsProps> = ({
   createEntityUrl,
   isCheckable,
   toggleIsCheckable,
+  filters,
+  filtersNode,
 }) => {
   return (
-    <div className="flex justify-end gap-2 align-middle">
+    <div className="flex justify-end gap-2 items-center">
+      <EntityListFilter count={getEntityFilterCount(filters)}>
+        {filtersNode}
+      </EntityListFilter>
       <Button
         color="default"
         size="large"

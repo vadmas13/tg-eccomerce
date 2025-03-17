@@ -12,9 +12,10 @@ export const mapTgQueryParams = (dto: TgBotQueryParams): TgUser => {
 };
 
 export const objectToQueryString = (
-  params: Record<string, any>,
+  params?: Record<string, any>,
   options?: { arrayValueWillBeJoined?: boolean },
 ): string => {
+  if (!params) return "";
   const buildQuery = (obj: Record<string, any>, prefix = ""): string => {
     return Object.entries(obj)
       .filter(([_, value]) => !!value)

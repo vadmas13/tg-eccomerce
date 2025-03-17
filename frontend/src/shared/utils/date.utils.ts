@@ -1,4 +1,4 @@
-export const formatDate = (inputDate: string): string => {
+export const formatDate = (inputDate: string, onlyDate?: boolean): string => {
   const date = new Date(inputDate);
 
   const day = String(date.getDate()).padStart(2, "0");
@@ -7,5 +7,7 @@ export const formatDate = (inputDate: string): string => {
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
 
-  return `${day}.${month}.${year} в ${hours}:${minutes}`;
+  const base = `${day}.${month}.${year}`;
+
+  return onlyDate ? base : `${base} в ${hours}:${minutes}`;
 };

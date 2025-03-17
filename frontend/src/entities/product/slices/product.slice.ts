@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getEntityFilterCount } from "@shared/utils";
 
 const productSlice = createSlice({
   name: "product",
@@ -9,6 +10,7 @@ const productSlice = createSlice({
       minPrice: undefined,
       maxPrice: undefined,
     },
+    searchListParamsCount: 0,
   },
   reducers: {
     setSearhListFilters: (state, action) => {
@@ -16,6 +18,8 @@ const productSlice = createSlice({
         ...action.payload,
         name: state.searchListParams.name,
       };
+      state.searchListParamsCount =
+        getEntityFilterCount(state.searchListParams) ?? 0;
     },
     setSearhListName: (state, action) => {
       state.searchListParams = {

@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { OrderService } from './order.service';
-import { OrderBaseDto, OrderStateDto } from './dto';
+import { OrderBaseDto, OrderPaymentStateDto, OrderStateDto } from './dto';
 import { QueryRequired, Roles, RolesGuard } from '@share';
 import { Role } from '@prisma/client';
 import { Request } from 'express';
@@ -35,6 +35,11 @@ export class OrderController {
     @Patch()
     changeOrderState(@Body() dto: OrderStateDto) {
         return this.orderService.changeOrderState(dto);
+    }
+
+    @Patch()
+    changeOrderPaymentState(@Body() dto: OrderPaymentStateDto) {
+        return this.orderService.changeOrderPaymentState(dto);
     }
 
     @Delete()

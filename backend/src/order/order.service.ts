@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '@prisma';
-import { OrderBaseDto, OrderStateDto } from './dto';
+import { OrderBaseDto, OrderPaymentStateDto, OrderStateDto } from './dto';
 import { CartService } from '@cart';
 import { CartState, Order, OrderPaymentState, OrderStatus } from '@prisma/client';
 import { PaginationModel, getEntityListPagination } from '@share';
@@ -35,6 +35,7 @@ export class OrderService {
         const count = await this.prismaService.order.count({
             where: getOrderListFilters(queryParams),
         });
+
         const result: PaginationModel<Order[]> = {
             data,
             totalCount: count,
@@ -90,6 +91,10 @@ export class OrderService {
 
     async changeOrderState({ id, status }: OrderStateDto) {
         return this.prismaService.order.update({ where: { id }, data: { status } });
+    }
+
+    async changeOrderPaymentState({ id, status }: OrderPaymentStateDto) {
+        return this.prismaService.order.update({ where: { id }, data: { payementStatus: status } });
     }
 
     removeOrder(id: string) {

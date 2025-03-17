@@ -31,6 +31,14 @@ const CreateOrderPageUI: FC<CreateOrderPageUIProps> = ({ userId }) => {
       "Заказ успешно создан! Теперь вы можете отслеживать свой заказ в разделе 'Заказы'",
     onSuccess: async () => {
       await resetCartCashe(queryClient, userId);
+      await queryClient.invalidateQueries({
+        queryKey: [QueryKey.OrderAll],
+        exact: false,
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [QueryKey.OrderList],
+        exact: false,
+      });
       router.push(routes.base.url);
     },
   });

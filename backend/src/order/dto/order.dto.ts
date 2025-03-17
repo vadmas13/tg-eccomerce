@@ -1,4 +1,4 @@
-import { Order, OrderStatus, OrderAddressType } from '@prisma/client';
+import { Order, OrderStatus, OrderAddressType, OrderPaymentState } from '@prisma/client';
 import { IsEnumValue, IsExistingPropery, MaxLength, IsNotEmpty } from '@share';
 import { Validate } from 'class-validator';
 
@@ -46,4 +46,13 @@ export class OrderStateDto {
     @IsNotEmpty()
     @IsEnumValue(OrderStatus)
     status: OrderStatus;
+}
+
+export class OrderPaymentStateDto {
+    @IsNotEmpty()
+    @Validate(IsExistingPropery, ['order', 'id'])
+    id: string;
+    @IsNotEmpty()
+    @IsEnumValue(OrderPaymentState)
+    status: OrderPaymentState;
 }

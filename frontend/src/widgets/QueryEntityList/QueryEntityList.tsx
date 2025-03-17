@@ -5,9 +5,10 @@ import { typography } from "@shared/consts";
 import { useListMutation } from "@shared/hooks";
 import { PaginationDto, PaginationModel } from "@shared/models";
 import { DebounceSearchBar, QueryPaginationContainer } from "@shared/ui";
+import { objectToQueryString } from "@shared/utils";
 import { MutationFunction } from "@tanstack/react-query";
 import { InfiniteScroll, PullToRefresh } from "antd-mobile";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 
 type QueryEntityListProps<TData> = {
   title: string;
@@ -24,6 +25,10 @@ type QueryEntityListProps<TData> = {
     createUrl?: string;
     editBaseUrl?: string;
   };
+  getFiltersNode?: (
+    filters: Record<string, unknown>,
+    setFilters: (f: Record<string, unknown>) => void,
+  ) => ReactNode;
 };
 
 const QueryEntityList = <TData extends { id: string }>({
@@ -31,10 +36,12 @@ const QueryEntityList = <TData extends { id: string }>({
   deleteMutation,
   queryOptions,
   actions,
+  getFiltersNode,
 }: QueryEntityListProps<TData>) => {
   const [name, setName] = useState<string>();
   const [isCheckable, setIsCheckable] = useState(false);
   const [checkedIds, setCheckedIds] = useState<string[]>([]);
+  const [filters, setFilters] = useState<Record<string, unknown>>({});
 
   const { mutate: deleteItem } = useListMutation<
     TData,
@@ -43,7 +50,7 @@ const QueryEntityList = <TData extends { id: string }>({
   >(deleteMutation.queryKeys, deleteMutation.fn, ({ id }) => (oldData) => {
     return {
       ...oldData,
-      data: oldData?.data?.filter((category) => category.id !== id),
+      data: oldData?.data?.filter((item) => item.id !== id),
     };
   });
 
@@ -77,12 +84,19 @@ const QueryEntityList = <TData extends { id: string }>({
           createEntityUrl={actions?.createUrl}
           toggleIsCheckable={toggleIsCheckable}
           isCheckable={isCheckable}
+          filters={filters}
+          filtersNode={getFiltersNode?.(filters, setFilters)}
         />
       </div>
       <DebounceSearchBar onChange={setName} />
       <QueryPaginationContainer<TData[]>
         queryOptions={{
-          queryKey: queryOptions.getQueryKeys(name),
+          queryKey: queryOptions.getQueryKeys(
+            objectToQueryString(
+              { name, ...filters },
+              { arrayValueWillBeJoined: true },
+            ),
+          ),
           getNextPageParam: (lastPage) => {
             const info = lastPage as PaginationDto;
             return info.page + 1;
@@ -93,6 +107,7 @@ const QueryEntityList = <TData extends { id: string }>({
               name,
               page: pageParam as number,
               pageSize: 10,
+              ...filters,
             }),
         }}
       >
